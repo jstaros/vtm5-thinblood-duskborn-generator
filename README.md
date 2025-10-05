@@ -114,4 +114,4 @@ PRs and issues are welcome! If you add new options or presets, please:
 * jsPDF, jsPDF-AutoTable, and jspdf-forms authors for great client-side PDF tooling.
 
 
----
+
