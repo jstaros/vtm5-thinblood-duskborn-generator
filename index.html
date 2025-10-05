@@ -1,87 +1,198 @@
+Absolutely—here’s a refreshed, **more aesthetically polished** single-file `index.html`. It keeps all your existing features (Thin-blood focus, dice roller with Hunger, budgets & auto-assign, JSON save/load, **fillable PDF export**) but upgrades the **visual design**: dark glass UI, improved typography, subtle gradients, icons, a left sidebar for quick navigation, and cleaner spacing.
+
+Just replace your current file with this one (or paste into `index.html`):
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>VTM5 Thin-blood (Duskborn) Builder</title>
+  <title>VTM5 Thin-blood / Duskborn Builder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Fonts & minimal styling -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=UnifrakturMaguntia&display=swap">
   <style>
+    /* ===== Aesthetic Overhaul (glass, gradients, clean rhythm) ===== */
     :root{
-      --bg:#0f1115;--panel:#161a22;--ink:#e8ecf1;--muted:#9aa3b2;--accent:#b51e23;--soft:#232a36;--ring:#2e3747;
+      --bg:#0B0E13;
+      --bg2:#0e1219;
+      --panel:rgba(22,27,37,.75);
+      --ink:#E9EEF6;
+      --muted:#9DA7B7;
+      --accent:#C01925;          /* VTM red */
+      --accent-2:#7f1620;
+      --ring:#2F3A4F;
+      --soft:#182030;
+      --soft-2:#111726;
+      --success:#77E28C;
+      --warn:#FFC86B;
+      --danger:#FF7A7A;
+      --shadow:0 10px 40px rgba(0,0,0,.45);
+      --radius-xl:18px;
+      --radius-lg:14px;
+      --radius-md:12px;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--ink); font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background: radial-gradient(1200px 800px at 10% -5%, #1a2335 0%, transparent 65%),
+                  radial-gradient(1400px 900px at 110% 110%, #1e0f13 0%, transparent 60%),
+                  linear-gradient(180deg, var(--bg), var(--bg2));
+      background-attachment: fixed;
+    }
     a{color:#9dd0ff}
-    .wrap{max-width:1200px;margin:40px auto;padding:0 20px}
-    .grid{display:grid;gap:16px}
+    .page{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+    @media (max-width: 1000px){ .page{grid-template-columns:1fr} .sidebar{position:static; height:auto}}
+    .sidebar{
+      position:sticky; top:0; height:100vh; padding:22px; backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(22,27,37,.55), rgba(17,23,38,.35));
+      border-right:1px solid var(--ring);
+    }
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .brand .logo{
+      width:42px;height:42px;border-radius:12px; display:grid; place-items:center;
+      background: radial-gradient(70% 80% at 30% 20%, #ff4052 0%, #8d0f1a 65%), #1d0a0d;
+      box-shadow: var(--shadow);
+      font-family: "UnifrakturMaguntia", serif; font-size:22px; letter-spacing:1px;
+    }
+    .brand h1{font-size:18px;margin:0;font-weight:800;letter-spacing:.3px}
+    .brand .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .nav{margin-top:12px; display:grid; gap:8px}
+    .nav a{
+      text-decoration:none;color:var(--ink); font-weight:600; font-size:14px; padding:10px 12px; border-radius:12px;
+      display:flex; align-items:center; gap:10px; border:1px solid transparent;
+    }
+    .nav a:hover{ background:#151b28; border-color:var(--ring)}
+    .nav svg{opacity:.8}
+    .sidebar .foot{position:absolute;bottom:18px;left:22px;right:22px;color:var(--muted);font-size:11px}
+    .content{padding:28px; max-width:1200px}
+    .toolbar{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; margin-bottom:18px
+    }
+    .btn{
+      background:linear-gradient(180deg, var(--accent), var(--accent-2));
+      border:none;color:white; padding:10px 14px; border-radius:12px; font-weight:800; cursor:pointer; box-shadow: var(--shadow)
+    }
+    .btn.secondary{ background:linear-gradient(180deg, #2c3649, #20293a)}
+    .btn.ghost{ background:transparent; border:1px solid var(--ring); color:var(--ink)}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .grid{display:grid; gap:16px}
     .g-2{grid-template-columns:1fr 1fr}
     .g-3{grid-template-columns:repeat(3,1fr)}
-    @media (max-width:1000px){.g-2,.g-3{grid-template-columns:1fr}}
-    .card{background:linear-gradient(180deg,var(--panel),#12151c);border:1px solid var(--ring);border-radius:16px;padding:16px;box-shadow:0 8px 30px #00000055}
-    .h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    h1{font-weight:800;letter-spacing:.3px;margin:0 0 6px;font-size:28px}
-    h2{font-weight:700;font-size:18px;margin:0}
-    .muted{color:var(--muted);font-size:12px}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    label{font-size:12px;color:var(--muted)}
-    input[type="text"],input[type="number"],select,textarea{
-      width:100%;background:var(--soft);color:var(--ink);border:1px solid var(--ring);
-      border-radius:10px;padding:10px 12px;outline:none
+    @media (max-width:1100px){ .g-2,.g-3{grid-template-columns:1fr}}
+    .section{margin-bottom:18px}
+    .card{
+      background: linear-gradient(180deg, rgba(28,34,49,.85), rgba(20,25,38,.85));
+      border:1px solid var(--ring); border-radius:var(--radius-xl); padding:16px; box-shadow: var(--shadow)
     }
-    textarea{min-height:72px;resize:vertical}
-    .pill{display:inline-flex;align-items:center;gap:8px;background:#1c2230;border:1px solid var(--ring);border-radius:999px;padding:8px 12px}
-    .btn{background:var(--accent);border:none;color:white;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#2b3446}
-    .btn.ghost{background:transparent;border:1px solid var(--ring);color:var(--ink)}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
-    .section-title{font-weight:800;margin:8px 0 4px}
-    .dot-row{display:flex;gap:6px;align-items:center}
-    .dot{width:28px;height:28px;border-radius:8px;background:#1b212d;border:1px solid var(--ring);display:flex;align-items:center;justify-content:center;cursor:pointer}
-    .dot.active{background:#2a3448}
-    .kpi{display:flex;gap:16px;flex-wrap:wrap}
-    .kpi .item{background:#1b212d;border:1px solid var(--ring);border-radius:12px;padding:8px 12px}
-    .hr{height:1px;background:linear-gradient(90deg,transparent,var(--ring),transparent);margin:12px 0}
-    .badge{background:#263146;border:1px solid var(--ring);padding:4px 8px;border-radius:8px;font-size:11px}
-    .notice{border-left:3px solid var(--accent);padding:10px 12px;background:#161b24;border-radius:10px}
-    .table{width:100%;border-collapse:collapse}
-    .table td,.table th{border-bottom:1px solid var(--ring);padding:8px;text-align:left}
-    .right{text-align:right}
+    .h{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px}
+    h2{font-size:18px; margin:0; font-weight:800}
+    .badge{font-size:11px; color:#d8e6ff; background:#23304a; border:1px solid var(--ring); padding:4px 8px; border-radius:999px}
+    .muted{color:var(--muted)}
+    label{font-size:12px;color:var(--muted); display:block; margin-bottom:6px}
+    input[type="text"],input[type="number"],select,textarea{
+      width:100%; background:linear-gradient(180deg, #121827, #0d1220);
+      color:var(--ink); border:1px solid var(--ring); border-radius:12px; padding:10px 12px; outline:none
+    }
+    textarea{min-height:82px; resize:vertical}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:#121a2b;border:1px solid var(--ring);border-radius:999px;padding:8px 12px}
+    .kpi{display:flex;gap:12px;flex-wrap:wrap}
+    .kpi .item{background:#11192a; border:1px solid var(--ring); border-radius:12px; padding:8px 12px; font-size:12px}
+    .hr{height:1px; background: linear-gradient(90deg, transparent, var(--ring), transparent); margin:12px 0}
+    .dot-row{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+    .dot{
+      width:28px;height:28px;border-radius:9px;background:linear-gradient(180deg,#182134,#101726);
+      border:1px solid var(--ring); display:flex;align-items:center;justify-content:center; cursor:pointer; user-select:none;
+      transition: transform .05s ease;
+    }
+    .dot:hover{transform: translateY(-1px)}
+    .dot.active{background:linear-gradient(180deg, #27324d,#1a2337); box-shadow: inset 0 0 0 2px #2f3b58}
     .small{font-size:12px}
-    .success{color:#77e28c}
-    .warn{color:#ffcc66}
-    .danger{color:#ff7a7a}
+    .success{color:var(--success)} .warn{color:var(--warn)} .danger{color:var(--danger)}
+    .notice{border-left:3px solid var(--accent); padding:10px 12px; background:#131a2a; border-radius:12px}
+    .table{width:100%; border-collapse: collapse}
+    .table th,.table td{border-bottom:1px solid var(--ring); padding:8px; text-align:left}
+    .toolbar-sticky{position:sticky; top:0; z-index:50; padding-bottom:8px; backdrop-filter: blur(8px)}
+    .title-stack h1{margin:0;font-weight:800; letter-spacing:.3px; font-size:28px}
+    .title-stack .sub{color:var(--muted); font-size:13px}
+    .chip{font-size:11px; color:#e7cfda; background:linear-gradient(180deg,#3b1220,#280b14); border:1px solid #511321; padding:4px 8px; border-radius:999px}
+    .section-title{font-weight:800; margin:8px 0 4px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
   </style>
 
-  <!-- jsPDF (for fillable PDF), AutoTable (for skills), and AcroForm plugin -->
+  <!-- PDF tools -->
   <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://unpkg.com/jspdf-forms@1.2.5/dist/jspdf-forms.umd.min.js"></script>
 </head>
 <body>
-  <div class="wrap">
-    <div class="h">
-      <div>
-        <h1>Thin-blood / Duskborn Character Builder (V5)</h1>
-        <div class="muted">Create, roll dice, and export a fillable PDF. Built for Vampire: The Masquerade 5e Thin-bloods.</div>
+  <div class="page">
+    <!-- ===== Sidebar ===== -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">V</div>
+        <div>
+          <h1>Thin-blood Builder</h1>
+          <div class="sub">Vampire: The Masquerade 5e</div>
+        </div>
       </div>
-      <div class="row">
-        <button id="btnExport" class="btn">Download Fillable PDF</button>
-        <button id="btnSaveLocal" class="btn secondary">Save JSON</button>
-        <button id="btnLoadLocal" class="btn ghost">Load JSON</button>
-      </div>
-    </div>
+      <nav class="nav">
+        <a href="#identity">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5.006 5.006 0 0 0 5 5Zm0 2c-4.336 0-8 2.239-8 5v1h16v-1c0-2.761-3.664-5-8-5Z"/></svg>
+          Identity
+        </a>
+        <a href="#merits">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7l10 5 10-5-10-5Zm0 7L2 4v13l10 5 10-5V4Z"/></svg>
+          Merits & Flaws
+        </a>
+        <a href="#attributes">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10v4H7zm0 7h10v4H7zm0 7h10v4H7z"/></svg>
+          Attributes
+        </a>
+        <a href="#skills">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v2H3zm0 6h12v2H3zm0 6h8v2H3z"/></svg>
+          Skills
+        </a>
+        <a href="#thinblood">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s7 6.273 7 11a7 7 0 1 1-14 0C5 8.273 12 2 12 2z"/></svg>
+          Thin-blood
+        </a>
+        <a href="#roller">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 9l11 13L23 9 12 2Zm0 3.3L19 9l-7 8.3L5 9l7-3.7Z"/></svg>
+          Dice Roller
+        </a>
+        <a href="#settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m19.14 12.94.86-1.49-1.5-2.6-1.72.29a5.6 5.6 0 0 0-1-.58l-.26-1.73L12 4l-1.52 1.23-.26 1.73a5.6 5.6 0 0 0-1 .58l-1.72-.29-1.5 2.6.86 1.49a5.6 5.6 0 0 0 0 1.16l-.86 1.49 1.5 2.6 1.72-.29a5.6 5.6 0 0 0 1 .58l.26 1.73L12 20l1.52-1.23.26-1.73a5.6 5.6 0 0 0 1-.58l1.72.29 1.5-2.6-.86-1.49a5.6 5.6 0 0 0 0-1.16ZM12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
+          Settings
+        </a>
+      </nav>
+      <div class="foot">Fan-made tool. Use with official books. 🩸</div>
+    </aside>
 
-    <div class="grid g-2">
+    <!-- ===== Main Content ===== -->
+    <main class="content">
+      <div class="toolbar toolbar-sticky">
+        <div class="title-stack">
+          <h1>Thin-blood / Duskborn Character Builder</h1>
+          <div class="sub">Create, roll, and export a fillable PDF. Sleek UI • zero build tools.</div>
+        </div>
+        <div class="row" style="margin-left:auto">
+          <button id="btnExport" class="btn">Download Fillable PDF</button>
+          <button id="btnSaveLocal" class="btn secondary">Save JSON</button>
+          <button id="btnLoadLocal" class="btn ghost">Load JSON</button>
+        </div>
+      </div>
+
       <!-- Identity -->
-      <section class="card">
-        <div class="h"><h2>Identity</h2><span class="badge">Basics</span></div>
+      <section id="identity" class="section card">
+        <div class="h">
+          <h2>Identity</h2>
+          <span class="badge">Basics</span>
+        </div>
         <div class="grid g-2">
-          <div>
-            <label>Character Name</label>
-            <input id="name" type="text" placeholder="e.g., Wren ‘Sunset’ Park" />
-          </div>
+          <div><label>Character Name</label><input id="name" type="text" placeholder="e.g., Wren ‘Sunset’ Park" /></div>
           <div>
             <label>Concept / Archetype</label>
             <select id="archetype">
@@ -93,52 +204,30 @@
               <option>Sun Seeker</option>
             </select>
           </div>
-          <div>
-            <label>Ambition</label>
-            <input id="ambition" type="text" placeholder="Long-term goal" />
-          </div>
-          <div>
-            <label>Desire</label>
-            <input id="desire" type="text" placeholder="Immediate urge" />
-          </div>
-          <div>
-            <label>Chronicle</label>
-            <input id="chronicle" type="text" placeholder="City / Theme" />
-          </div>
-          <div>
-            <label>Coterie</label>
-            <input id="coterie" type="text" placeholder="Allies / Role" />
-          </div>
-          <div>
-            <label>Predator Type (optional)</label>
-            <input id="predator" type="text" placeholder="Alleycat, Siren, etc." />
-          </div>
-          <div>
-            <label>Convictions (comma-separated)</label>
-            <input id="convictions" type="text" placeholder="Never harm children, Protect street artists…" />
-          </div>
-          <div>
-            <label>Touchstones (comma-separated)</label>
-            <input id="touchstones" type="text" placeholder="My brother Jay; the soup-kitchen crew…" />
-          </div>
-          <div>
-            <label>Notes</label>
-            <input id="notes" type="text" placeholder="Any quick notes" />
-          </div>
+          <div><label>Ambition</label><input id="ambition" type="text" placeholder="Long-term goal" /></div>
+          <div><label>Desire</label><input id="desire" type="text" placeholder="Immediate urge" /></div>
+          <div><label>Chronicle</label><input id="chronicle" type="text" placeholder="City / Theme" /></div>
+          <div><label>Coterie</label><input id="coterie" type="text" placeholder="Allies / Role" /></div>
+          <div><label>Predator Type (optional)</label><input id="predator" type="text" placeholder="Alleycat, Siren, etc." /></div>
+          <div><label>Convictions (comma-separated)</label><input id="convictions" type="text" placeholder="Never harm children, Protect street artists…" /></div>
+          <div><label>Touchstones (comma-separated)</label><input id="touchstones" type="text" placeholder="My brother Jay; the soup-kitchen crew…" /></div>
+          <div><label>Notes</label><input id="notes" type="text" placeholder="Any quick notes" /></div>
         </div>
         <div class="hr"></div>
-        <div class="notice small">
-          Thin-bloods walk the line between mortal and Kindred and often explore Thin-Blood Alchemy as their “edge.” :contentReference[oaicite:1]{index=1}
+        <div class="row" style="gap:6px">
+          <span class="chip">Duskborn</span>
+          <span class="chip">Alchemy-inclined</span>
+          <span class="chip">Street-level intrigue</span>
         </div>
       </section>
 
       <!-- Merits & Flaws -->
-      <section class="card">
-        <div class="h"><h2>Thin-blood Merits & Flaws</h2><span class="badge">From V5 Player’s Guide</span></div>
+      <section id="merits" class="section card">
+        <div class="h"><h2>Thin-blood Merits & Flaws</h2><span class="badge">Choose what fits</span></div>
         <div class="grid g-2">
           <div>
-            <label>Merits (choose any that fit)</label>
-            <select id="merits" multiple size="8">
+            <label>Merits</label>
+            <select id="meritsSel" multiple size="8">
               <option>Abhorrent Blood</option>
               <option>Faith-proof</option>
               <option>Low Appetite</option>
@@ -148,8 +237,8 @@
             </select>
           </div>
           <div>
-            <label>Flaws (choose any that fit)</label>
-            <select id="flaws" multiple size="8">
+            <label>Flaws</label>
+            <select id="flawsSel" multiple size="8">
               <option>Heliophobia</option>
               <option>Night Terrors</option>
               <option>Plague Bearer</option>
@@ -161,123 +250,99 @@
             </select>
           </div>
         </div>
-        <div class="small muted" style="margin-top:8px">
-          These Thin-blood-only Merits/Flaws are presented as paired trade-offs in the Player’s Guide (no dot costs). :contentReference[oaicite:2]{index=2}
+        <div class="small muted" style="margin-top:8px">Pick the traits your Storyteller allows for your chronicle tone.</div>
+      </section>
+
+      <!-- Attributes -->
+      <section id="attributes" class="section card">
+        <div class="h"><h2>Attributes</h2><span class="badge">Point-buy with presets</span></div>
+        <div class="kpi">
+          <div class="item">Primary: <b id="attrPrimaryBudget">6</b></div>
+          <div class="item">Secondary: <b id="attrSecondaryBudget">4</b></div>
+          <div class="item">Tertiary: <b id="attrTertiaryBudget">3</b></div>
+          <div class="item muted">Min 1 • Max 5</div>
+          <div class="item"><button id="btnAutoAttrs" class="btn secondary">Auto-assign (balanced)</button></div>
+        </div>
+        <div class="grid g-3" id="attrGrid"></div>
+      </section>
+
+      <!-- Skills -->
+      <section id="skills" class="section card">
+        <div class="h"><h2>Skills</h2><span class="badge">Point-buy with presets</span></div>
+        <div class="kpi">
+          <div class="item">Primary: <b id="skillPrimaryBudget">11</b></div>
+          <div class="item">Secondary: <b id="skillSecondaryBudget">7</b></div>
+          <div class="item">Tertiary: <b id="skillTertiaryBudget">4</b></div>
+          <div class="item muted">Min 0 • Max 5</div>
+          <div class="item"><button id="btnAutoSkills" class="btn secondary">Auto-assign (heuristic)</button></div>
+        </div>
+        <div class="grid g-3" id="skillGrid"></div>
+      </section>
+
+      <!-- Thin-blood block -->
+      <section id="thinblood" class="section card">
+        <div class="h"><h2>Thin-blood Details</h2><span class="badge">V5 Duskborn</span></div>
+        <div class="grid g-3">
+          <div><label>Hunger (0–5)</label><input id="hunger" type="number" min="0" max="5" value="1" /></div>
+          <div><label>Health (Derived)</label><input id="health" type="number" min="1" max="15" value="7" /></div>
+          <div><label>Willpower (Derived)</label><input id="willpower" type="number" min="1" max="10" value="5" /></div>
+          <div><label>Thin-Blood Alchemy Notes</label><textarea id="alchemy" placeholder="Formulae, ingredients, lab access …"></textarea></div>
+          <div><label>Advantages (Allies, Contacts, Resources, etc.)</label><textarea id="advantages"></textarea></div>
+          <div><label>Flaws / Banes</label><textarea id="banes"></textarea></div>
         </div>
       </section>
-    </div>
 
-    <!-- Attributes -->
-    <section class="card">
-      <div class="h"><h2>Attributes</h2><span class="badge">Point-buy with presets</span></div>
-      <div class="kpi">
-        <div class="item small">Primary Budget: <span id="attrPrimaryBudget">6</span></div>
-        <div class="item small">Secondary Budget: <span id="attrSecondaryBudget">4</span></div>
-        <div class="item small">Tertiary Budget: <span id="attrTertiaryBudget">3</span></div>
-        <div class="item small">Minimum 1 dot each; max 5.</div>
-        <div class="item"><button id="btnAutoAttrs" class="btn secondary">Auto-assign (balanced)</button></div>
-      </div>
-      <div class="grid g-3" id="attrGrid"></div>
-    </section>
+      <!-- Dice Roller -->
+      <section id="roller" class="section card">
+        <div class="h"><h2>Dice Roller</h2><span class="badge">V5 successes, Hunger, crits</span></div>
+        <div class="row">
+          <div class="pill"><label>Dice Pool</label><input id="pool" type="number" min="0" value="6" style="width:90px"></div>
+          <div class="pill"><label>Hunger</label><input id="poolHunger" type="number" min="0" max="5" value="2" style="width:90px"></div>
+          <button id="btnRoll" class="btn">Roll</button>
+        </div>
+        <div id="rollOutput" class="small" style="margin-top:12px"></div>
+      </section>
 
-    <!-- Skills -->
-    <section class="card">
-      <div class="h"><h2>Skills</h2><span class="badge">Point-buy with presets</span></div>
-      <div class="kpi">
-        <div class="item small">Primary: <span id="skillPrimaryBudget">11</span></div>
-        <div class="item small">Secondary: <span id="skillSecondaryBudget">7</span></div>
-        <div class="item small">Tertiary: <span id="skillTertiaryBudget">4</span></div>
-        <div class="item small">Min 0; max 5. Add specs in notes.</div>
-        <div class="item"><button id="btnAutoSkills" class="btn secondary">Auto-assign (career-ish)</button></div>
-      </div>
-      <div class="grid g-3" id="skillGrid"></div>
-    </section>
-
-    <!-- Thin-Blood bits -->
-    <section class="card">
-      <div class="h"><h2>Thin-blood Stuff</h2><span class="badge">V5 Duskborn</span></div>
-      <div class="grid g-3">
-        <div>
-          <label>Hunger (0–5)</label>
-          <input id="hunger" type="number" min="0" max="5" value="1" />
-        </div>
-        <div>
-          <label>Health (Derived)</label>
-          <input id="health" type="number" min="1" max="15" value="7" />
-        </div>
-        <div>
-          <label>Willpower (Derived)</label>
-          <input id="willpower" type="number" min="1" max="10" value="5" />
-        </div>
-        <div>
-          <label>Thin-Blood Alchemy Notes</label>
-          <textarea id="alchemy" placeholder="Formulae, Ingredients, Lab access …"></textarea>
-        </div>
-        <div>
-          <label>Advantages (Contacts, Allies, Resources, etc.)</label>
-          <textarea id="advantages"></textarea>
-        </div>
-        <div>
-          <label>Flaws / Banes</label>
-          <textarea id="banes"></textarea>
-        </div>
-      </div>
-      <div class="hr"></div>
-      <div class="notice small">
-        Optional rule reminders: some Thin-bloods struggle with sunlight, social friction with Kindred, or unusual feeding quirks—use Merits/Flaws above to reflect these. :contentReference[oaicite:3]{index=3}
-      </div>
-    </section>
-
-    <!-- Dice Roller -->
-    <section class="card">
-      <div class="h"><h2>Dice Roller</h2><span class="badge">V5 successes, Hunger, crits</span></div>
-      <div class="row">
-        <div class="pill"><label>Dice Pool</label><input id="pool" type="number" min="0" value="6" style="width:80px"></div>
-        <div class="pill"><label>Hunger</label><input id="poolHunger" type="number" min="0" max="5" value="2" style="width:80px"></div>
-        <button id="btnRoll" class="btn">Roll</button>
-      </div>
-      <div id="rollOutput" class="small" style="margin-top:10px"></div>
-    </section>
-
-    <!-- Settings -->
-    <section class="card">
-      <div class="h"><h2>Settings</h2><span class="badge">Budgets & options</span></div>
-      <div class="grid g-3">
-        <div>
-          <label>Attribute Budgets (Primary/Secondary/Tertiary)</label>
-          <div class="row">
-            <input id="sAttrP" type="number" min="0" value="6" style="width:90px">
-            <input id="sAttrS" type="number" min="0" value="4" style="width:90px">
-            <input id="sAttrT" type="number" min="0" value="3" style="width:90px">
+      <!-- Settings -->
+      <section id="settings" class="section card">
+        <div class="h"><h2>Settings</h2><span class="badge">Budgets & options</span></div>
+        <div class="grid g-3">
+          <div>
+            <label>Attribute Budgets (Primary / Secondary / Tertiary)</label>
+            <div class="row">
+              <input id="sAttrP" type="number" min="0" value="6" style="width:90px">
+              <input id="sAttrS" type="number" min="0" value="4" style="width:90px">
+              <input id="sAttrT" type="number" min="0" value="3" style="width:90px">
+            </div>
+          </div>
+          <div>
+            <label>Skill Budgets (Primary / Secondary / Tertiary)</label>
+            <div class="row">
+              <input id="sSkillP" type="number" min="0" value="11" style="width:90px">
+              <input id="sSkillS" type="number" min="0" value="7" style="width:90px">
+              <input id="sSkillT" type="number" min="0" value="4" style="width:90px">
+            </div>
+          </div>
+          <div>
+            <label>Auto-assign Lean</label>
+            <select id="autoLean">
+              <option value="balanced">Balanced</option>
+              <option value="physical">Physical-leaning</option>
+              <option value="social">Social-leaning</option>
+              <option value="mental">Mental-leaning</option>
+            </select>
           </div>
         </div>
-        <div>
-          <label>Skill Budgets (Primary/Secondary/Tertiary)</label>
-          <div class="row">
-            <input id="sSkillP" type="number" min="0" value="11" style="width:90px">
-            <input id="sSkillS" type="number" min="0" value="7" style="width:90px">
-            <input id="sSkillT" type="number" min="0" value="4" style="width:90px">
-          </div>
+        <div class="row" style="margin-top:10px">
+          <button id="btnApply" class="btn secondary">Apply Budgets</button>
+          <div class="muted small">You can override any dots manually afterward.</div>
         </div>
-        <div>
-          <label>Auto-assign Lean</label>
-          <select id="autoLean">
-            <option value="balanced">Balanced</option>
-            <option value="physical">Physical-leaning</option>
-            <option value="social">Social-leaning</option>
-            <option value="mental">Mental-leaning</option>
-          </select>
-        </div>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <button id="btnApply" class="btn secondary">Apply Budgets</button>
-        <div class="muted small">You can override any dots manually afterward.</div>
-      </div>
-    </section>
+      </section>
 
-    <footer class="muted small" style="margin-top:24px">
-      Thin-blood/Duskborn context & Merits/Flaws adapted from the Vampire: The Masquerade Player’s Guide (2023). For table play, always defer to your ST’s rulings. :contentReference[oaicite:4]{index=4}
-    </footer>
+      <footer class="muted small" style="padding:8px 4px 28px">
+        Fan-made, non-commercial helper. Please support official books. 🖤
+      </footer>
+    </main>
   </div>
 
   <script>
@@ -287,7 +352,6 @@
       Social: ["Charisma","Manipulation","Composure"],
       Mental: ["Intelligence","Wits","Resolve"]
     };
-
     const SKILLS = {
       Physical:["Athletics","Brawl","Craft","Drive","Firearms","Larceny","Melee","Stealth","Survival"],
       Social:["Animal Ken","Etiquette","Insight","Intimidation","Leadership","Performance","Persuasion","Streetwise","Subterfuge"],
@@ -295,68 +359,67 @@
     };
 
     // ======= Helpers =======
-    const $ = sel => document.querySelector(sel);
-    const el = (tag,cls) => { const n=document.createElement(tag); if(cls) n.className=cls; return n; };
+    const $ = s => document.querySelector(s);
+    const el = (tag, cls) => { const n=document.createElement(tag); if(cls) n.className=cls; return n; };
 
-    function makeDotRow(idPrefix, start=1, min=1, max=5, onChange){
+    function makeDotRow(defaultVal=1, min=0, max=5, onChange){
       const row = el('div','dot-row');
-      const val = el('input'); val.type='hidden'; val.value = start; val.dataset.min=min; val.dataset.max=max;
-      for(let i=1;i<=5;i++){
+      const hidden = el('input'); hidden.type='hidden'; hidden.value = defaultVal; hidden.dataset.min=min; hidden.dataset.max=max;
+      for(let i=0;i<=5;i++){
         const d = el('div','dot'); d.textContent=i;
-        if(i<=start) d.classList.add('active');
-        d.addEventListener('click',()=>{
-          const v = i;
-          val.value=v;
+        if(i<=defaultVal) d.classList.add('active');
+        d.addEventListener('click', ()=>{
+          hidden.value=i;
           for(const child of row.querySelectorAll('.dot')){
-            child.classList.toggle('active', parseInt(child.textContent)<=v);
+            child.classList.toggle('active', parseInt(child.textContent)<=i);
           }
-          onChange?.(v);
+          onChange?.(i);
         });
         row.appendChild(d);
       }
-      row.appendChild(val);
-      return {row,value:val};
+      row.appendChild(hidden);
+      return {row, value:hidden};
     }
 
-    // ======= Build Attribute UI =======
+    // ======= Build Attributes =======
     const attrGrid = $("#attrGrid");
     const attrState = {};
     function buildAttrs(){
       attrGrid.innerHTML='';
       Object.entries(ATTR_GROUPS).forEach(([group, attrs])=>{
-        const card = el('div','card');
-        const h = el('div','h'); h.innerHTML = `<h2>${group}</h2><span class="badge">min 1 • max 5</span>`; card.appendChild(h);
+        const block = el('div','card');
+        const h = el('div','h'); h.innerHTML = `<h2>${group}</h2><span class="badge">1–5</span>`; block.appendChild(h);
         attrs.forEach(name=>{
           const wrap = el('div');
           wrap.innerHTML = `<div class="section-title">${name}</div>`;
-          const dots = makeDotRow(`attr-${name}`, 1, 1, 5, v => attrState[name]=v);
+          const dots = makeDotRow(1,1,5, v=> attrState[name]=v);
           attrState[name]=1;
-          wrap.appendChild(dots.row);
-          card.appendChild(wrap);
+          block.appendChild(wrap);
+          block.appendChild(dots.row);
         });
-        attrGrid.appendChild(card);
+        attrGrid.appendChild(block);
       });
     }
 
-    // ======= Build Skill UI =======
+    // ======= Build Skills =======
     const skillGrid = $("#skillGrid");
     const skillState = {};
     function buildSkills(){
       skillGrid.innerHTML='';
-      Object.entries(SKILLS).forEach(([group, skills])=>{
-        const card = el('div','card');
-        const h = el('div','h'); h.innerHTML = `<h2>${group}</h2><span class="badge">0–5</span>`; card.appendChild(h);
-        skills.forEach(name=>{
+      Object.entries(SKILLS).forEach(([group, list])=>{
+        const block = el('div','card');
+        const h = el('div','h'); h.innerHTML = `<h2>${group}</h2><span class="badge">0–5</span>`; block.appendChild(h);
+        list.forEach(name=>{
           const wrap = el('div');
           wrap.innerHTML = `<div class="section-title">${name}</div>`;
-          const dots = makeDotRow(`skill-${name}`, 0, 0, 5, v => skillState[name]=v);
-          // set to 0 by de-activating all initially
+          const dots = makeDotRow(0,0,5, v=> skillState[name]=v);
+          // start at 0 (de-activate all)
           for(const d of dots.row.querySelectorAll('.dot')) d.classList.remove('active');
           skillState[name]=0;
-          wrap.appendChild(dots.row);
-          card.appendChild(wrap);
+          block.appendChild(wrap);
+          block.appendChild(dots.row);
         });
-        skillGrid.appendChild(card);
+        skillGrid.appendChild(block);
       });
     }
 
@@ -377,120 +440,92 @@
         }
       };
     }
-
     function applyBudgets(){
       const b = getBudgets();
-      $("#attrPrimaryBudget").textContent = b.attr.primary;
-      $("#attrSecondaryBudget").textContent = b.attr.secondary;
-      $("#attrTertiaryBudget").textContent = b.attr.tertiary;
-      $("#skillPrimaryBudget").textContent = b.skills.primary;
-      $("#skillSecondaryBudget").textContent = b.skills.secondary;
-      $("#skillTertiaryBudget").textContent = b.skills.tertiary;
+      $("#attrPrimaryBudget").textContent=b.attr.primary;
+      $("#attrSecondaryBudget").textContent=b.attr.secondary;
+      $("#attrTertiaryBudget").textContent=b.attr.tertiary;
+      $("#skillPrimaryBudget").textContent=b.skills.primary;
+      $("#skillSecondaryBudget").textContent=b.skills.secondary;
+      $("#skillTertiaryBudget").textContent=b.skills.tertiary;
     }
-    $("#btnApply").addEventListener('click',applyBudgets);
+    $("#btnApply").addEventListener('click', applyBudgets);
     applyBudgets();
 
     function autoAssignAttributes(){
       const lean = $("#autoLean").value;
       const b = getBudgets().attr;
-      // reset to 1 each
       Object.keys(attrState).forEach(k=>attrState[k]=1);
       const groups = {
         physical: ["Strength","Dexterity","Stamina"],
         social: ["Charisma","Manipulation","Composure"],
         mental: ["Intelligence","Wits","Resolve"]
       };
-      const order = (()=>{
-        switch(lean){
-          case 'physical': return ["physical","social","mental"];
-          case 'social': return ["social","mental","physical"];
-          case 'mental': return ["mental","social","physical"];
-          default: return ["physical","social","mental"];
-        }
-      })();
+      const order = (lean==='physical')?["physical","social","mental"] :
+                    (lean==='social')?["social","mental","physical"] :
+                    (lean==='mental')?["mental","social","physical"] :
+                    ["physical","social","mental"];
       const budgets = [b.primary,b.secondary,b.tertiary];
-      // add dots evenly until budgets spent (above the base 1 each)
-      order.forEach((group,idx)=>{
+
+      order.forEach((g,idx)=>{
         let pool = budgets[idx];
-        const names = groups[group];
+        const names = groups[g].slice();
         while(pool>0){
-          names.sort((a,b)=>attrState[a]-attrState[b]); // raise the lowest first
-          const target = names[0];
-          if(attrState[target]<5){ attrState[target]++; pool--; } else {
-            names.shift();
-            if(!names.length) break;
-          }
+          names.sort((a,b)=>attrState[a]-attrState[b]);
+          const t = names[0];
+          if(attrState[t]<5){ attrState[t]++; pool--; } else { names.shift(); if(!names.length) break; }
         }
       });
-      // re-paint
-      repaintDots(attrState, 'attr');
+      repaintDots();
     }
     $("#btnAutoAttrs").addEventListener('click', autoAssignAttributes);
 
     function autoAssignSkills(){
       const b = getBudgets().skills;
-      // zero all first
       Object.keys(skillState).forEach(k=>skillState[k]=0);
-      const groups = {
-        primary: Object.keys(SKILLS)[0],
-        secondary: Object.keys(SKILLS)[1],
-        tertiary: Object.keys(SKILLS)[2]
-      };
-      // helper: spread points across a list up to max 5 with diminishing returns
-      function spread(names,total){
-        let i=0;
-        while(total>0){
-          const name = names[i%names.length];
-          if(skillState[name]<5){ skillState[name]++; total--; }
-          i++;
-        }
-      }
       const all = { Physical: SKILLS.Physical.slice(), Social: SKILLS.Social.slice(), Mental: SKILLS.Mental.slice() };
-      // Use a simple heuristic: primary = Mental if archetype is Blood Chemist or Paranormalist, else Physical
       const arch = $("#archetype").value;
-      let primaryGroup = (arch==="Blood Chemist"||arch==="Paranormalist") ? "Mental" : "Physical";
-      let secondaryGroup = "Social", tertiaryGroup = (primaryGroup==="Physical"?"Mental":"Physical");
+      const primaryGroup = (arch==="Blood Chemist"||arch==="Paranormalist") ? "Mental" : "Physical";
+      const secondaryGroup = "Social";
+      const tertiaryGroup = (primaryGroup==="Physical" ? "Mental" : "Physical");
+      function spread(names,total){ let i=0; while(total>0){ const n = names[i%names.length]; if(skillState[n]<5){ skillState[n]++; total--; } i++; } }
       spread(all[primaryGroup], b.primary);
       spread(all[secondaryGroup], b.secondary);
       spread(all[tertiaryGroup], b.tertiary);
-      repaintDots(skillState, 'skill');
+      repaintDots();
     }
     $("#btnAutoSkills").addEventListener('click', autoAssignSkills);
 
-    function repaintDots(state, prefix){
-      for(const [name,val] of Object.entries(state)){
-        const container = document.querySelectorAll(`[id^=${prefix}-${CSS.escape(name)}]`);
-        // not strictly needed due to single build, but kept for clarity
-      }
-      // brute force: repaint all dot groups
+    function repaintDots(){
+      // Repaint all dot groups by syncing inputs to visuals
       document.querySelectorAll('.dot-row').forEach(row=>{
-        const dots = [...row.querySelectorAll('.dot')];
-        const v = parseInt(row.querySelector('input[type=hidden]')?.value || 0);
-        dots.forEach(d=>d.classList.toggle('active', parseInt(d.textContent)<=v));
+        const hidden = row.querySelector('input[type=hidden]');
+        const v = parseInt(hidden?.value || 0);
+        row.querySelectorAll('.dot').forEach(d=>{
+          d.classList.toggle('active', parseInt(d.textContent)<=v);
+        });
       });
     }
 
     // ======= Dice Roller (V5) =======
     function rollV5(pool, hunger){
-      const results = { normals:[], hungers:[], successes:0, crits:0, messy:false, bestial:false };
-      function d10(){ return Math.floor(Math.random()*10)+1; }
-      for(let i=0;i<Math.max(pool-hunger,0);i++){ results.normals.push(d10()); }
-      for(let i=0;i<Math.min(hunger,pool);i++){ results.hungers.push(d10()); }
-      const all = [...results.normals, ...results.hungers];
-      // count successes (6–9 = 1, 10s handled below)
-      results.successes = all.filter(n=>n>=6 && n<10).length;
+      const r = { normals:[], hungers:[], successes:0, crits:0, messy:false, bestial:false };
+      const d10 = ()=> Math.floor(Math.random()*10)+1;
+      for(let i=0;i<Math.max(pool-hunger,0);i++) r.normals.push(d10());
+      for(let i=0;i<Math.min(hunger,pool);i++) r.hungers.push(d10());
+      const all = [...r.normals, ...r.hungers];
+      r.successes = all.filter(n=>n>=6 && n<10).length;
       const tens = all.filter(n=>n===10).length;
-      results.crits = Math.floor(tens/2); // each pair = +2 extra successes
-      results.successes += results.crits*2 + tens; // each 10 counts as 1 + pair bonus
-      const hungerTens = results.hungers.filter(n=>n===10).length;
-      const anySuccess = results.successes>0;
-      const anyHungerOne = results.hungers.includes(1);
-      if(hungerTens>0 && tens>=2) results.messy = true;
-      if(anyHungerOne && !anySuccess) results.bestial = true;
-      return results;
+      r.crits = Math.floor(tens/2); // each pair +2
+      r.successes += r.crits*2 + tens; // 10 counts as 1 + pair bonus
+      const hungerTens = r.hungers.filter(n=>n===10).length;
+      const anySuccess = r.successes>0;
+      const anyHungerOne = r.hungers.includes(1);
+      if(hungerTens>0 && tens>=2) r.messy = true;
+      if(anyHungerOne && !anySuccess) r.bestial = true;
+      return r;
     }
-
-    $("#btnRoll").addEventListener('click',()=>{
+    $("#btnRoll").addEventListener('click', ()=>{
       const pool = parseInt($("#pool").value||0);
       const hunger = Math.min(Math.max(parseInt($("#poolHunger").value||0),0),5);
       const r = rollV5(pool,hunger);
@@ -519,42 +554,26 @@
         name: $("#name").value, archetype: $("#archetype").value, ambition: $("#ambition").value, desire: $("#desire").value,
         chronicle: $("#chronicle").value, coterie: $("#coterie").value, predator: $("#predator").value,
         convictions: $("#convictions").value, touchstones: $("#touchstones").value, notes: $("#notes").value,
-        merits: [...$("#merits").selectedOptions].map(o=>o.value),
-        flaws: [...$("#flaws").selectedOptions].map(o=>o.value),
-        attrs: {...attrState},
-        skills: {...skillState},
-        hunger: parseInt($("#hunger").value||0),
-        health: parseInt($("#health").value||0),
-        willpower: parseInt($("#willpower").value||0),
-        alchemy: $("#alchemy").value,
-        advantages: $("#advantages").value,
-        banes: $("#banes").value,
+        merits: [...$("#meritsSel").selectedOptions].map(o=>o.value),
+        flaws: [...$("#flawsSel").selectedOptions].map(o=>o.value),
+        attrs: {...attrState}, skills: {...skillState},
+        hunger: parseInt($("#hunger").value||0), health: parseInt($("#health").value||0), willpower: parseInt($("#willpower").value||0),
+        alchemy: $("#alchemy").value, advantages: $("#advantages").value, banes: $("#banes").value,
         settings: getBudgets()
       };
     }
     function loadData(data){
-      $("#name").value=data.name||'';
-      $("#archetype").value=data.archetype||'';
-      $("#ambition").value=data.ambition||'';
-      $("#desire").value=data.desire||'';
-      $("#chronicle").value=data.chronicle||'';
-      $("#coterie").value=data.coterie||'';
-      $("#predator").value=data.predator||'';
-      $("#convictions").value=data.convictions||'';
-      $("#touchstones").value=data.touchstones||'';
+      $("#name").value=data.name||''; $("#archetype").value=data.archetype||''; $("#ambition").value=data.ambition||'';
+      $("#desire").value=data.desire||''; $("#chronicle").value=data.chronicle||''; $("#coterie").value=data.coterie||'';
+      $("#predator").value=data.predator||''; $("#convictions").value=data.convictions||''; $("#touchstones").value=data.touchstones||'';
       $("#notes").value=data.notes||'';
-      // merits/flaws
-      [...$("#merits").options].forEach(o=>o.selected = data.merits?.includes(o.value));
-      [...$("#flaws").options].forEach(o=>o.selected = data.flaws?.includes(o.value));
-      // attributes
-      if(data.attrs){ for(const [k,v] of Object.entries(data.attrs)){ attrState[k]=v; } repaintDots(attrState,'attr'); }
-      if(data.skills){ for(const [k,v] of Object.entries(data.skills)){ skillState[k]=v; } repaintDots(skillState,'skill'); }
-      $("#hunger").value=data.hunger??1;
-      $("#health").value=data.health??7;
-      $("#willpower").value=data.willpower??5;
-      $("#alchemy").value=data.alchemy||'';
-      $("#advantages").value=data.advantages||'';
-      $("#banes").value=data.banes||'';
+      [...$("#meritsSel").options].forEach(o=>o.selected = data.merits?.includes(o.value));
+      [...$("#flawsSel").options].forEach(o=>o.selected = data.flaws?.includes(o.value));
+      if(data.attrs){ for(const [k,v] of Object.entries(data.attrs)){ attrState[k]=v; } }
+      if(data.skills){ for(const [k,v] of Object.entries(data.skills)){ skillState[k]=v; } }
+      repaintDots();
+      $("#hunger").value=data.hunger??1; $("#health").value=data.health??7; $("#willpower").value=data.willpower??5;
+      $("#alchemy").value=data.alchemy||''; $("#advantages").value=data.advantages||''; $("#banes").value=data.banes||'';
       if(data.settings){
         $("#sAttrP").value=data.settings.attr?.primary??6;
         $("#sAttrS").value=data.settings.attr?.secondary??4;
@@ -566,7 +585,7 @@
       }
     }
 
-    $("#btnSaveLocal").addEventListener('click',()=>{
+    $("#btnSaveLocal").addEventListener('click', ()=>{
       const data = collectData();
       const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
       const a = document.createElement('a');
@@ -575,12 +594,11 @@
       document.body.appendChild(a); a.click(); a.remove();
     });
 
-    $("#btnLoadLocal").addEventListener('click',()=>{
+    $("#btnLoadLocal").addEventListener('click', ()=>{
       const i = document.createElement('input'); i.type='file'; i.accept='application/json';
       i.addEventListener('change', async ()=>{
         const file = i.files[0]; if(!file) return;
-        const text = await file.text();
-        try{ const data = JSON.parse(text); loadData(data); } catch(e){ alert('Invalid JSON.'); }
+        try{ const data = JSON.parse(await file.text()); loadData(data); } catch{ alert('Invalid JSON.'); }
       });
       i.click();
     });
@@ -592,14 +610,14 @@
       const doc = new jsPDF({ unit:'pt', format:'letter' });
       const margin = 36;
       const line = (y)=>{ doc.setDrawColor(60,70,90); doc.line(margin,y,612-margin,y); }
+
       doc.setFont('helvetica','bold'); doc.setFontSize(16);
       doc.text('VTM5 Thin-blood / Duskborn Character Sheet', margin, 50);
       doc.setFontSize(10); doc.setFont('helvetica','normal');
       doc.text('Generated in-browser • PDF is fillable', margin, 66);
       line(74);
 
-      const f = window.jsPDFAcroForm; // from jspdf-forms
-      f.initForm(doc);
+      const f = window.jsPDFAcroForm; f.initForm(doc);
 
       let y = 92;
       function field(label, val, x, w){
@@ -607,7 +625,6 @@
         f.TextField({name:label, x:x, y:y+6, width:w, height:16, value: String(val||'')});
       }
 
-      // Row 1
       field('Name', data.name, margin, 200);
       field('Archetype', data.archetype, margin+210, 140);
       field('Chronicle', data.chronicle, margin+360, 200);
@@ -644,21 +661,13 @@
       doc.setFont('helvetica','bold'); doc.setFontSize(12);
       doc.text('Skills', margin, y);
       doc.autoTable({
-        startY: y+6,
-        theme: 'plain',
-        headStyles: { fillColor:[0,0,0] },
-        styles: { cellPadding: 3, fontSize: 9 },
+        startY: y+6, theme:'plain', headStyles:{fillColor:[0,0,0]}, styles:{cellPadding:3, fontSize:9},
         head:[['Skill','Dots','Skill','Dots','Skill','Dots']],
-        body: (function(){
-          const rows=[];
-          const maxRows = Math.max(SKILLS.Physical.length, SKILLS.Social.length, SKILLS.Mental.length);
-          for(let i=0;i<maxRows;i++){
+        body:(()=>{
+          const rows=[]; const max = Math.max(SKILLS.Physical.length, SKILLS.Social.length, SKILLS.Mental.length);
+          for(let i=0;i<max;i++){
             const p = SKILLS.Physical[i], s = SKILLS.Social[i], m = SKILLS.Mental[i];
-            rows.push([
-              p||'', String(p? (data.skills[p]||0):''), 
-              s||'', String(s? (data.skills[s]||0):''), 
-              m||'', String(m? (data.skills[m]||0):'')
-            ]);
+            rows.push([ p||'', String(p? (data.skills[p]||0):''), s||'', String(s? (data.skills[s]||0):''), m||'', String(m? (data.skills[m]||0):'') ]);
           }
           return rows;
         })()
@@ -672,7 +681,7 @@
       f.TextField({name:'Flaws', x:margin+270, y:y+6, width:260, height:40, value:(data.flaws||[]).join(', ')});
       y += 56; line(y); y+=16;
 
-      // Alchemy & Advantages / Notes
+      // Notes
       doc.setFont('helvetica','bold'); doc.text('Thin-Blood Alchemy', margin, y); doc.setFont('helvetica','normal');
       f.TextField({name:'Alchemy', x:margin, y:y+6, width:530, height:50, value:data.alchemy||'' , multiline:true});
       y += 64;
@@ -684,11 +693,9 @@
       y += 80; line(y);
 
       f.finalizeForm();
-
       doc.save((data.name?.trim() || 'thinblood') + '_vtm5_fillable.pdf');
     }
     $("#btnExport").addEventListener('click', exportPDF);
-
   </script>
 </body>
 </html>
