@@ -113,6 +113,5 @@ PRs and issues are welcome! If you add new options or presets, please:
 * Community resources and official books used at the table for reference and validation.
 * jsPDF, jsPDF-AutoTable, and jspdf-forms authors for great client-side PDF tooling.
 
----
 
-**Happy hunting, Duskborn.** If you want me to tailor the README (badges, CI, or a roadmap board), say the word!
+---
